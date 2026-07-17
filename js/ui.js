@@ -4,7 +4,7 @@
 
 const NAV_ITEMS = {
   admin: [
-    { key:'dashboard', label:'Dashboard', icon:'fa-grid-2', href:'admin-dashboard.html' },
+    { key:'dashboard', label:'Dashboard', icon:'fa-solid fa-gauge', href:'admin-dashboard.html' },
     { key:'students', label:'Students', icon:'fa-user-graduate', href:'students.html' },
     { key:'teachers', label:'Teachers', icon:'fa-chalkboard-user', href:'teachers.html' },
     { key:'attendance', label:'Attendance', icon:'fa-clipboard-check', href:'attendance.html' },
@@ -15,7 +15,7 @@ const NAV_ITEMS = {
     { key:'settings', label:'Settings', icon:'fa-gear', href:'settings.html' }
   ],
   teacher: [
-    { key:'dashboard', label:'Dashboard', icon:'fa-grid-2', href:'teacher-dashboard.html' },
+    { key:'dashboard', label:'Dashboard', icon:'fa-solid fa-gauge', href:'teacher-dashboard.html' },
     { key:'students', label:'My Students', icon:'fa-user-graduate', href:'students.html' },
     { key:'attendance', label:'Attendance', icon:'fa-clipboard-check', href:'attendance.html' },
     { key:'results', label:'Results', icon:'fa-chart-line', href:'results.html' },
