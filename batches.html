@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Batches · Brightline</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="css/theme.css">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="page-loader" id="pageLoader"><div class="spinner"></div></div>
+
+<div class="app-shell">
+  <div id="sidebarRoot"></div>
+  <div class="main-col">
+    <div id="topbarRoot"></div>
+
+    <main class="page">
+      <div class="page-head">
+        <div><h1>Batches</h1><p class="desc">Group students by subject, timing and assigned teacher.</p></div>
+        <button class="btn btn-primary" id="addBatchBtn"><i class="fa-solid fa-plus"></i> Create Batch</button>
+      </div>
+
+      <div class="grid grid-3" id="batchesGrid"></div>
+      <div class="empty-state" id="batchesEmpty" style="display:none;">
+        <div class="ic"><i class="fa-solid fa-layer-group"></i></div>
+        <div class="t">No batches yet</div>
+        <div class="d">Create your first batch to start organizing students.</div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="batchModal">
+  <div class="modal modal-lg">
+    <div class="modal-head"><h3 id="batchModalTitle">Create Batch</h3><button class="btn-icon" onclick="closeModal('batchModal')"><i class="fa-solid fa-xmark"></i></button></div>
+    <form id="batchForm">
+      <div class="modal-body">
+        <input type="hidden" id="batchFormId">
+        <div class="form-grid">
+          <div class="field no-icon"><label>Batch name</label><input type="text" id="batchName" placeholder="e.g. NEET Morning" required></div>
+          <div class="field no-icon"><label>Subject</label><input type="text" id="batchSubject" required></div>
+          <div class="field no-icon"><label>Timing</label><input type="text" id="batchTiming" placeholder="e.g. 7:00 AM - 9:00 AM" required></div>
+          <div class="field no-icon"><label>Assign teacher</label><select id="batchTeacher"></select></div>
+        </div>
+        <div class="field no-icon mt-14">
+          <label>Assign students</label>
+          <div class="chip-select" id="batchStudentChips"></div>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button type="button" class="btn btn-ghost" onclick="closeModal('batchModal')">Cancel</button>
+        <button type="submit" class="btn btn-primary">Save Batch</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="js/storage.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/charts.js"></script>
+<script src="js/app.js"></script>
+<script>
+  const user = Auth.guard('admin');
+  if(user){ initShell('batches', user); initBatchesPage(user); }
+</script>
+</body>
+</html>

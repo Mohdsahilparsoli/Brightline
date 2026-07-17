@@ -1,0 +1,90 @@
+/* ==========================================================================
+   THEME TOKENS — Brightline (Coaching / Tuition Management)
+   ========================================================================== */
+
+:root{
+  /* ---- Brand ---- */
+  --primary: #4F46E5;
+  --primary-dark: #4338CA;
+  --primary-light: #EEF2FF;
+  --primary-glow: rgba(79,70,229,.28);
+
+  --teacher-accent: #0D9488;
+  --teacher-accent-light: #CCFBF1;
+
+  /* ---- Surfaces ---- */
+  --bg: #F9FAFB;
+  --card: #FFFFFF;
+  --card-alt: #F3F4F6;
+  --border: #E5E7EB;
+  --sidebar-bg: #121231;
+  --sidebar-text: #C7C9F2;
+  --sidebar-active: #4F46E5;
+
+  /* ---- Text ---- */
+  --text: #111827;
+  --text-soft: #6B7280;
+  --text-faint: #9CA3AF;
+
+  /* ---- Status ---- */
+  --success: #059669;
+  --success-bg: #D1FAE5;
+  --warning: #D97706;
+  --warning-bg: #FEF3C7;
+  --danger: #DC2626;
+  --danger-bg: #FEE2E2;
+  --info: #2563EB;
+  --info-bg: #DBEAFE;
+
+  /* ---- Elevation ---- */
+  --shadow-sm: 0 1px 2px rgba(17,24,39,.05);
+  --shadow-md: 0 4px 14px rgba(17,24,39,.08);
+  --shadow-lg: 0 12px 32px rgba(17,24,39,.12);
+
+  /* ---- Radius ---- */
+  --r-sm: 8px;
+  --r-md: 12px;
+  --r-lg: 14px;
+  --r-pill: 999px;
+
+  /* ---- Type ---- */
+  --font-display: 'Plus Jakarta Sans', 'Inter', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* ---- Motion ---- */
+  --ease: cubic-bezier(.4,0,.2,1);
+  --fast: 150ms;
+  --med: 260ms;
+}
+
+[data-theme="dark"]{
+  --bg: #111827;
+  --card: #1F2937;
+  --card-alt: #24304A;
+  --border: #313E52;
+  --sidebar-bg: #0B0F1A;
+  --sidebar-text: #A5A9E6;
+
+  --text: #F9FAFB;
+  --text-soft: #9CA3AF;
+  --text-faint: #6B7280;
+
+  --primary: #6366F1;
+  --primary-dark: #818CF8;
+  --primary-light: #1E1B4B;
+  --primary-glow: rgba(99,102,241,.35);
+
+  --success-bg: rgba(5,150,105,.18);
+  --warning-bg: rgba(217,119,6,.18);
+  --danger-bg: rgba(220,38,38,.18);
+  --info-bg: rgba(37,99,235,.18);
+
+  --shadow-sm: 0 1px 2px rgba(0,0,0,.3);
+  --shadow-md: 0 4px 14px rgba(0,0,0,.35);
+  --shadow-lg: 0 16px 40px rgba(0,0,0,.45);
+}
+
+@media (prefers-reduced-motion: reduce){
+  *{ animation-duration: .001ms !important; transition-duration: .001ms !important; }
+}

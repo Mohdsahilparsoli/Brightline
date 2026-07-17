@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Results · Brightline</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="css/theme.css">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="page-loader" id="pageLoader"><div class="spinner"></div></div>
+
+<div class="app-shell">
+  <div id="sidebarRoot"></div>
+  <div class="main-col">
+    <div id="topbarRoot"></div>
+
+    <main class="page">
+      <div class="page-head">
+        <div><h1>Results</h1><p class="desc">Enter and review subject-wise marks for each batch.</p></div>
+      </div>
+
+      <div class="card mb-14">
+        <div class="card-pad" style="display:flex;gap:14px;flex-wrap:wrap;align-items:flex-end;">
+          <div class="field no-icon" style="margin:0;min-width:240px;">
+            <label>Batch</label>
+            <select id="resultBatchSelect"></select>
+          </div>
+          <button class="btn btn-primary" style="margin-left:auto;" id="saveResultsBtn"><i class="fa-solid fa-floppy-disk"></i> Save Results</button>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Student</th><th>Marks (out of 100)</th><th>Grade</th></tr></thead>
+          <tbody id="resultsTbody"></tbody>
+        </table>
+      </div>
+      <div class="empty-state" id="resultsEmpty" style="display:none;">
+        <div class="ic"><i class="fa-solid fa-chart-line"></i></div>
+        <div class="t">No students to grade</div>
+        <div class="d">This batch has no students assigned yet.</div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script src="js/storage.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/charts.js"></script>
+<script src="js/app.js"></script>
+<script>
+  const user = Auth.guard(null);
+  if(user){ initShell('results', user); initResultsPage(user); }
+</script>
+</body>
+</html>

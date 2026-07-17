@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Create account · Brightline</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="css/theme.css">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="auth-shell">
+  <div class="auth-visual">
+    <div class="brand"><div class="logo-mark"><i class="fa-solid fa-graduation-cap" style="color:#fff;font-size:15px;"></i></div>Brightline</div>
+    <div>
+      <h1 class="headline">Set up your institute in minutes.</h1>
+      <p class="sub">Create an admin account to manage your whole institute, or a teacher account to manage your own batches and students.</p>
+      <div class="ring-stat">
+        <div class="item"><div class="num">2</div><div class="lbl">Role types</div></div>
+        <div class="item"><div class="num">9</div><div class="lbl">Modules included</div></div>
+        <div class="item"><div class="num">0</div><div class="lbl">Setup cost</div></div>
+      </div>
+    </div>
+    <div class="foot">© 2026 Brightline Academy · Frontend demo, data stored locally in your browser</div>
+  </div>
+
+  <div class="auth-form-side">
+    <div class="auth-card">
+      <div class="mobile-brand"><div class="logo-mark"></div>Brightline</div>
+      <h1>Create your account</h1>
+      <p class="lead">Start managing your coaching institute today.</p>
+
+      <div class="role-toggle" id="roleToggle">
+        <button type="button" class="active" data-role="admin"><i class="fa-solid fa-user-tie"></i> Admin</button>
+        <button type="button" data-role="teacher"><i class="fa-solid fa-chalkboard-user"></i> Teacher</button>
+      </div>
+
+      <form id="signupForm" novalidate>
+        <div class="field">
+          <label for="suName">Full name</label>
+          <div class="input-wrap"><i class="fa-solid fa-user"></i><input type="text" id="suName" placeholder="e.g. Ananya Verma" required></div>
+          <div class="field-error" id="suNameError">Name is required.</div>
+        </div>
+        <div class="field">
+          <label for="suEmail">Email address</label>
+          <div class="input-wrap"><i class="fa-solid fa-envelope"></i><input type="email" id="suEmail" placeholder="you@institute.com" required></div>
+          <div class="field-error" id="suEmailError">Enter a valid email address.</div>
+        </div>
+        <div class="field">
+          <label for="suPassword">Password</label>
+          <div class="input-wrap"><i class="fa-solid fa-lock"></i><input type="password" id="suPassword" placeholder="Minimum 6 characters" required></div>
+          <div class="field-error" id="suPasswordError">Password must be at least 6 characters.</div>
+        </div>
+        <div class="field">
+          <label for="suConfirm">Confirm password</label>
+          <div class="input-wrap"><i class="fa-solid fa-lock"></i><input type="password" id="suConfirm" placeholder="Re-enter password" required></div>
+          <div class="field-error" id="suConfirmError">Passwords do not match.</div>
+        </div>
+
+        <button class="btn btn-primary btn-block" type="submit" id="signupSubmitBtn"><span class="btn-label">Create account</span></button>
+      </form>
+
+      <p class="auth-footer-link">Already have an account? <a href="index.html" class="link-btn" style="display:inline;">Sign in</a></p>
+    </div>
+  </div>
+</div>
+
+<script src="js/storage.js"></script>
+<script src="js/auth.js"></script>
+<script>
+  (function(){ const u = Auth.currentUser(); if(u) window.location.href = u.role === 'admin' ? 'admin-dashboard.html' : 'teacher-dashboard.html'; })();
+
+  let selectedRole = 'admin';
+  document.querySelectorAll('#roleToggle button').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      document.querySelectorAll('#roleToggle button').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      selectedRole = btn.dataset.role;
+    });
+  });
+
+  document.getElementById('signupForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    const name = document.getElementById('suName').value.trim();
+    const email = document.getElementById('suEmail').value.trim();
+    const password = document.getElementById('suPassword').value;
+    const confirm = document.getElementById('suConfirm').value;
+
+    let valid = true;
+    const fields = {
+      suName: !!name, suEmail: /^\S+@\S+\.\S+$/.test(email), suPassword: password.length>=6, suConfirm: confirm===password && confirm.length>0
+    };
+    Object.entries(fields).forEach(([id, ok])=>{
+      const field = document.getElementById(id).closest('.field');
+      const err = document.getElementById(id+'Error');
+      field.classList.toggle('error', !ok);
+      err.classList.toggle('show', !ok);
+      if(!ok) valid = false;
+    });
+    if(!valid) return;
+
+    const btn = document.getElementById('signupSubmitBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<div class="spinner" style="width:16px;height:16px;border-width:2px;border-color:rgba(255,255,255,.4);border-top-color:#fff;"></div> Creating account...';
+
+    setTimeout(()=>{
+      const result = Auth.signup({ name, email, password, role: selectedRole });
+      if(result.ok){
+        toastless_redirect();
+      }else{
+        btn.disabled = false; btn.innerHTML = '<span class="btn-label">Create account</span>';
+        const field = document.getElementById('suEmail').closest('.field');
+        field.classList.add('error');
+        const err = document.getElementById('suEmailError');
+        err.textContent = result.message; err.classList.add('show');
+      }
+    }, 500);
+
+    function toastless_redirect(){
+      Auth.login(email, password, selectedRole);
+      window.location.href = selectedRole === 'admin' ? 'admin-dashboard.html' : 'teacher-dashboard.html';
+    }
+  });
+</script>
+</body>
+</html>

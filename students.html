@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Students · Brightline</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="css/theme.css">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="page-loader" id="pageLoader"><div class="spinner"></div></div>
+
+<div class="app-shell">
+  <div id="sidebarRoot"></div>
+  <div class="main-col">
+    <div id="topbarRoot"></div>
+
+    <main class="page">
+      <div class="page-head">
+        <div>
+          <h1 id="pageHeading">Students</h1>
+          <p class="desc" id="pageDesc">Manage every student enrolled at your institute.</p>
+        </div>
+        <button class="btn btn-primary" id="addStudentBtn" style="display:none;"><i class="fa-solid fa-plus"></i> Add Student</button>
+      </div>
+
+      <div class="toolbar">
+        <div class="left-tools">
+          <div class="search-wrap" style="max-width:260px;">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="studentSearch" placeholder="Search by name or phone...">
+          </div>
+          <select class="filter-select" id="batchFilterSel"></select>
+        </div>
+        <span class="text-soft mono" id="studentsCount" style="font-size:12.5px;"></span>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th><th>Phone</th><th>Batch</th><th>Fees</th><th>Status</th><th id="actionsHeader" style="display:none;">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="studentsTbody"></tbody>
+        </table>
+      </div>
+      <div class="empty-state" id="studentsEmpty" style="display:none;">
+        <div class="ic"><i class="fa-solid fa-user-graduate"></i></div>
+        <div class="t">No students found</div>
+        <div class="d">Try adjusting your search or filters, or add a new student.</div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- Add/Edit Student Modal -->
+<div class="modal-backdrop" id="studentModal">
+  <div class="modal">
+    <div class="modal-head"><h3 id="studentModalTitle">Add Student</h3><button class="btn-icon" onclick="closeModal('studentModal')"><i class="fa-solid fa-xmark"></i></button></div>
+    <form id="studentForm">
+      <div class="modal-body">
+        <input type="hidden" id="studentFormId">
+        <div class="form-grid">
+          <div class="field no-icon"><label>Full name</label><input type="text" id="studentName" required></div>
+          <div class="field no-icon"><label>Phone</label><input type="text" id="studentPhone" required></div>
+          <div class="field no-icon"><label>Batch</label><select id="studentBatch"></select></div>
+          <div class="field no-icon"><label>Fees amount (₹)</label><input type="number" id="studentFees" min="0" required></div>
+          <div class="field no-icon"><label>Status</label>
+            <select id="studentStatus">
+              <option value="Active">Active</option>
+              <option value="Inactive">Inactive</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button type="button" class="btn btn-ghost" onclick="closeModal('studentModal')">Cancel</button>
+        <button type="submit" class="btn btn-primary">Save Student</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="js/storage.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/charts.js"></script>
+<script src="js/app.js"></script>
+<script>
+  const user = Auth.guard(null);
+  if(user){
+    initShell('students', user);
+    if(user.role === 'teacher'){
+      document.getElementById('pageHeading').textContent = 'My Students';
+      document.getElementById('pageDesc').textContent = 'Students enrolled in your assigned batches.';
+    }else{
+      document.getElementById('addStudentBtn').style.display = 'inline-flex';
+      document.getElementById('actionsHeader').style.display = '';
+    }
+    initStudentsPage(user);
+  }
+</script>
+</body>
+</html>

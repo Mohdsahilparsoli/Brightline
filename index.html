@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Sign in · Brightline</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="css/theme.css">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="auth-shell">
+  <div class="auth-visual">
+    <div class="brand"><div class="logo-mark"><i class="fa-solid fa-graduation-cap" style="color:#fff;font-size:15px;"></i></div>Brightline</div>
+    <div>
+      <h1 class="headline">Run your coaching institute like a real SaaS product.</h1>
+      <p class="sub">Students, teachers, attendance, fees and results — all in one clean dashboard. Built for institute owners who want clarity, not chaos.</p>
+      <div class="ring-stat">
+        <div class="item"><div class="num">12+</div><div class="lbl">Students tracked</div></div>
+        <div class="item"><div class="num">4</div><div class="lbl">Teachers onboard</div></div>
+        <div class="item"><div class="num">92%</div><div class="lbl">Avg. attendance</div></div>
+      </div>
+    </div>
+    <div class="foot">© 2026 Brightline Academy · Frontend demo, data stored locally in your browser</div>
+  </div>
+
+  <div class="auth-form-side">
+    <div class="auth-card">
+      <div class="mobile-brand"><div class="logo-mark"></div>Brightline</div>
+      <h1>Welcome back</h1>
+      <p class="lead">Sign in to manage your institute.</p>
+
+      <div class="role-toggle" id="roleToggle">
+        <button type="button" class="active" data-role="admin"><i class="fa-solid fa-user-tie"></i> Admin</button>
+        <button type="button" data-role="teacher"><i class="fa-solid fa-chalkboard-user"></i> Teacher</button>
+      </div>
+
+      <form id="loginForm" novalidate>
+        <div class="field">
+          <label for="loginEmail">Email address</label>
+          <div class="input-wrap">
+            <i class="fa-solid fa-envelope"></i>
+            <input type="email" id="loginEmail" placeholder="you@institute.com" required>
+          </div>
+          <div class="field-error" id="loginEmailError">Enter a valid email address.</div>
+        </div>
+        <div class="field">
+          <label for="loginPassword">Password</label>
+          <div class="input-wrap">
+            <i class="fa-solid fa-lock"></i>
+            <input type="password" id="loginPassword" placeholder="••••••••" required>
+            <button type="button" class="toggle-eye" id="toggleEye"><i class="fa-solid fa-eye"></i></button>
+          </div>
+          <div class="field-error" id="loginPasswordError">Password is required.</div>
+        </div>
+
+        <div class="form-row-between">
+          <label class="checkbox-line"><input type="checkbox"> Remember me</label>
+          <button type="button" class="link-btn" id="forgotBtn">Forgot password?</button>
+        </div>
+
+        <button class="btn btn-primary btn-block" type="submit" id="loginSubmitBtn">
+          <span class="btn-label">Sign in</span>
+        </button>
+      </form>
+
+      <div class="demo-hint">
+        <b>Demo credentials</b><br>
+        Admin — admin@demo.com / 123456<br>
+        Teacher — teacher@demo.com / 123456
+      </div>
+
+      <p class="auth-footer-link">Don't have an account? <a href="signup.html" class="link-btn" style="display:inline;">Create one</a></p>
+    </div>
+  </div>
+</div>
+
+<!-- Forgot password modal -->
+<div class="modal-backdrop" id="forgotModal">
+  <div class="modal">
+    <div class="modal-head"><h3>Reset your password</h3><button class="btn-icon" onclick="closeModal('forgotModal')"><i class="fa-solid fa-xmark"></i></button></div>
+    <div class="modal-body" id="forgotModalBody">
+      <p class="text-soft" style="font-size:13.5px;">Enter the email linked to your account and we'll send a reset link (demo only — no email is actually sent).</p>
+      <div class="field no-icon mt-14">
+        <label for="forgotEmail">Email address</label>
+        <div class="input-wrap"><i class="fa-solid fa-envelope"></i><input type="email" id="forgotEmail" placeholder="you@institute.com"></div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeModal('forgotModal')">Cancel</button>
+      <button class="btn btn-primary" id="forgotSubmitBtn">Send reset link</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/storage.js"></script>
+<script src="js/auth.js"></script>
+<script>
+  // Redirect if already logged in
+  (function(){
+    const u = Auth.currentUser();
+    if(u) window.location.href = u.role === 'admin' ? 'admin-dashboard.html' : 'teacher-dashboard.html';
+  })();
+
+  let selectedRole = 'admin';
+  document.querySelectorAll('#roleToggle button').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      document.querySelectorAll('#roleToggle button').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      selectedRole = btn.dataset.role;
+    });
+  });
+
+  document.getElementById('toggleEye').addEventListener('click', ()=>{
+    const inp = document.getElementById('loginPassword');
+    const icon = document.querySelector('#toggleEye i');
+    if(inp.type === 'password'){ inp.type='text'; icon.className='fa-solid fa-eye-slash'; }
+    else{ inp.type='password'; icon.className='fa-solid fa-eye'; }
+  });
+
+  document.getElementById('loginForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    const email = document.getElementById('loginEmail').value.trim();
+    const password = document.getElementById('loginPassword').value;
+    let valid = true;
+
+    const emailField = document.getElementById('loginEmail').closest('.field');
+    const passField = document.getElementById('loginPassword').closest('.field');
+    emailField.classList.remove('error'); passField.classList.remove('error');
+    document.getElementById('loginEmailError').classList.remove('show');
+    document.getElementById('loginPasswordError').classList.remove('show');
+
+    if(!/^\S+@\S+\.\S+$/.test(email)){ emailField.classList.add('error'); document.getElementById('loginEmailError').classList.add('show'); valid=false; }
+    if(!password){ passField.classList.add('error'); document.getElementById('loginPasswordError').classList.add('show'); valid=false; }
+    if(!valid) return;
+
+    const btn = document.getElementById('loginSubmitBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<div class="spinner" style="width:16px;height:16px;border-width:2px;border-color:rgba(255,255,255,.4);border-top-color:#fff;"></div> Signing in...';
+
+    setTimeout(()=>{
+      const result = Auth.login(email, password, selectedRole);
+      if(result.ok){
+        window.location.href = result.user.role === 'admin' ? 'admin-dashboard.html' : 'teacher-dashboard.html';
+      }else{
+        btn.disabled = false;
+        btn.innerHTML = '<span class="btn-label">Sign in</span>';
+        passField.classList.add('error');
+        document.getElementById('loginPasswordError').textContent = result.message;
+        document.getElementById('loginPasswordError').classList.add('show');
+      }
+    }, 500);
+  });
+
+  document.getElementById('forgotBtn').addEventListener('click', ()=> openModal('forgotModal'));
+  document.getElementById('forgotSubmitBtn').addEventListener('click', ()=>{
+    const email = document.getElementById('forgotEmail').value.trim();
+    if(!email){ return; }
+    document.getElementById('forgotModalBody').innerHTML = `
+      <div class="success-box">
+        <div class="icon"><i class="fa-solid fa-paper-plane"></i></div>
+        <h3 style="font-size:16px;">Reset link sent</h3>
+        <p class="text-soft mt-8" style="font-size:13px;">If an account exists for <b>${email}</b>, a password reset link has been sent (demo only).</p>
+      </div>`;
+    document.querySelector('#forgotModal .modal-foot').innerHTML = `<button class="btn btn-primary btn-block" onclick="closeModal('forgotModal')">Done</button>`;
+  });
+</script>
+</body>
+</html>

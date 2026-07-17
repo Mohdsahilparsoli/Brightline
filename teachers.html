@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Teachers · Brightline</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="css/theme.css">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="page-loader" id="pageLoader"><div class="spinner"></div></div>
+
+<div class="app-shell">
+  <div id="sidebarRoot"></div>
+  <div class="main-col">
+    <div id="topbarRoot"></div>
+
+    <main class="page">
+      <div class="page-head">
+        <div><h1>Teachers</h1><p class="desc">Manage teaching staff and their batch assignments.</p></div>
+        <button class="btn btn-primary" id="addTeacherBtn"><i class="fa-solid fa-plus"></i> Add Teacher</button>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Name</th><th>Email</th><th>Subject</th><th>Assigned Batches</th><th>Actions</th></tr></thead>
+          <tbody id="teachersTbody"></tbody>
+        </table>
+      </div>
+      <div class="empty-state" id="teachersEmpty" style="display:none;">
+        <div class="ic"><i class="fa-solid fa-chalkboard-user"></i></div>
+        <div class="t">No teachers yet</div>
+        <div class="d">Add your first teacher to start assigning batches.</div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="teacherModal">
+  <div class="modal">
+    <div class="modal-head"><h3 id="teacherModalTitle">Add Teacher</h3><button class="btn-icon" onclick="closeModal('teacherModal')"><i class="fa-solid fa-xmark"></i></button></div>
+    <form id="teacherForm">
+      <div class="modal-body">
+        <input type="hidden" id="teacherFormId">
+        <div class="form-grid">
+          <div class="field no-icon"><label>Full name</label><input type="text" id="teacherName" required></div>
+          <div class="field no-icon"><label>Email</label><input type="email" id="teacherEmail" required></div>
+          <div class="field no-icon" style="grid-column:1/-1;"><label>Subject</label><input type="text" id="teacherSubject" placeholder="e.g. Physics" required></div>
+        </div>
+        <div class="field no-icon mt-14">
+          <label>Assigned batches</label>
+          <div class="chip-select" id="teacherBatchChips"></div>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button type="button" class="btn btn-ghost" onclick="closeModal('teacherModal')">Cancel</button>
+        <button type="submit" class="btn btn-primary">Save Teacher</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="js/storage.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/charts.js"></script>
+<script src="js/app.js"></script>
+<script>
+  const user = Auth.guard('admin');
+  if(user){ initShell('teachers', user); initTeachersPage(user); }
+</script>
+</body>
+</html>

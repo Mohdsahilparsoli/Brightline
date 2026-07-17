@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Settings · Brightline</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="css/theme.css">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="page-loader" id="pageLoader"><div class="spinner"></div></div>
+
+<div class="app-shell">
+  <div id="sidebarRoot"></div>
+  <div class="main-col">
+    <div id="topbarRoot"></div>
+
+    <main class="page">
+      <div class="page-head">
+        <div><h1>Settings</h1><p class="desc">Manage institute details, your profile, and preferences.</p></div>
+      </div>
+
+      <div class="grid" style="grid-template-columns:220px 1fr;gap:22px;">
+        <div class="card card-pad settings-nav">
+          <button class="active" data-panel="institute"><i class="fa-solid fa-building" style="margin-right:8px;"></i>Institute</button>
+          <button data-panel="profile"><i class="fa-solid fa-user" style="margin-right:8px;"></i>Profile</button>
+          <button data-panel="theme"><i class="fa-solid fa-palette" style="margin-right:8px;"></i>Theme</button>
+          <button data-panel="data"><i class="fa-solid fa-database" style="margin-right:8px;"></i>Data</button>
+        </div>
+
+        <div>
+          <div class="card card-pad settings-panel active" id="panel-institute">
+            <h3 style="font-size:14.5px;font-weight:700;margin-bottom:16px;">Institute details</h3>
+            <form id="instituteForm">
+              <div class="field no-icon"><label>Institute name</label><input type="text" id="instituteName"></div>
+              <div class="field no-icon mt-14">
+                <label>Logo</label>
+                <label class="upload-box" for="logoUpload" style="display:block;cursor:pointer;">
+                  <i class="fa-solid fa-cloud-arrow-up"></i>
+                  Click to upload a logo (preview only in this demo)
+                </label>
+                <input type="file" id="logoUpload" accept="image/*" style="display:none;">
+              </div>
+              <button type="submit" class="btn btn-primary mt-20"><i class="fa-solid fa-floppy-disk"></i> Save Changes</button>
+            </form>
+          </div>
+
+          <div class="card card-pad settings-panel" id="panel-profile">
+            <h3 style="font-size:14.5px;font-weight:700;margin-bottom:16px;">Your profile</h3>
+            <form id="profileForm">
+              <div class="field no-icon"><label>Full name</label><input type="text" id="profileName"></div>
+              <div class="field no-icon mt-14"><label>Email address</label><input type="email" id="profileEmail" disabled style="opacity:.6;"></div>
+              <button type="submit" class="btn btn-primary mt-20"><i class="fa-solid fa-floppy-disk"></i> Update Profile</button>
+            </form>
+          </div>
+
+          <div class="card card-pad settings-panel" id="panel-theme">
+            <h3 style="font-size:14.5px;font-weight:700;margin-bottom:16px;">Theme preference</h3>
+            <div style="display:flex;gap:14px;">
+              <label style="flex:1;border:1.5px solid var(--border);border-radius:var(--r-md);padding:16px;display:flex;flex-direction:column;gap:10px;cursor:pointer;">
+                <span style="display:flex;align-items:center;justify-content:space-between;"><b style="font-size:13px;">Light</b><input type="radio" name="themePref" value="light"></span>
+                <div style="height:60px;border-radius:8px;background:#F9FAFB;border:1px solid #E5E7EB;"></div>
+              </label>
+              <label style="flex:1;border:1.5px solid var(--border);border-radius:var(--r-md);padding:16px;display:flex;flex-direction:column;gap:10px;cursor:pointer;">
+                <span style="display:flex;align-items:center;justify-content:space-between;"><b style="font-size:13px;">Dark</b><input type="radio" name="themePref" value="dark"></span>
+                <div style="height:60px;border-radius:8px;background:#111827;border:1px solid #313E52;"></div>
+              </label>
+            </div>
+          </div>
+
+          <div class="card card-pad settings-panel" id="panel-data">
+            <h3 style="font-size:14.5px;font-weight:700;margin-bottom:16px;">Data export</h3>
+            <p class="text-soft" style="font-size:13px;">Export all institute data as a backup file (UI only in this frontend demo).</p>
+            <button class="btn btn-outline mt-20" id="exportDataBtn"><i class="fa-solid fa-download"></i> Export Data</button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script src="js/storage.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/charts.js"></script>
+<script src="js/app.js"></script>
+<script>
+  const user = Auth.guard('admin');
+  if(user){ initShell('settings', user); initSettingsPage(user); }
+</script>
+</body>
+</html>
